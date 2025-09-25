@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/mulex
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Keywords: mule, multilingual
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -33,12 +33,12 @@
 ;;; Code:
 
 (defvar mulex-languages
-  '(("chinese" . 'zh)
-    ("english" . 'en)
-    ("french" . 'fr)
-    ("german" . 'de)
-    ("japanese" . 'ja)
-    ("korean" . 'ko))
+  '(("chinese" . zh)
+    ("english" . en)
+    ("french" . fr)
+    ("german" . de)
+    ("japanese" . ja)
+    ("korean" . ko))
   "Mapping language string to IETF language tag.")
 
 (defun mulex-im-lang ()
@@ -70,13 +70,10 @@ If LANG is not given, the function will use `mulex-im-lang' for auto-discovery."
   (let ((lang (or lang (mulex-im-lang))))
     (alist-get lang (or tr (alist-get text mulex-tr nil nil #'equal)) text)))
 
-(defun mulex-date-parse (s-date)
-  "Parse date string S-DATE into numeric components.
-The parsed results are in `(year month day)'."
-  (let ((dt (parse-time-string s-date)))
-    `( ,(decoded-time-year dt)
-       ,(decoded-time-month dt)
-       ,(decoded-time-day dt) )))
+(defun mulex-date-decode (s-date)
+  "Decode date string S-DATE into numeric components.
+Use `decoded-time-' functions to get individual components."
+  (parse-time-string s-date))
 
 (defun mulex-date-format (year month day lang)
   "Format YEAR, MONTH, and DAY in LANG.
