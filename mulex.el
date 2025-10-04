@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/mulex
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Keywords: mule, multilingual
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -75,10 +75,10 @@ If LANG is not given, the function will use `mulex-im-lang' for auto-discovery."
 Use `decoded-time-' functions to get individual components."
   (parse-time-string s-date))
 
-(defun mulex-date-format (year month day lang)
+(defun mulex-date-format (year month day &optional lang)
   "Format YEAR, MONTH, and DAY in LANG.
 This function returns nil if given date cannot be formatted."
-  (pcase lang
+  (pcase (or lang (mulex-im-lang))
     ('ja
      (concat (and year (format "%d年" year))
              (and month (format "%d月" month))
@@ -86,9 +86,10 @@ This function returns nil if given date cannot be formatted."
     (_
      (cond
       ((and year month day)
-       (format "%s %d, %d" (nth (1- month) mulex-tr-months) day year))
+       (format "%s %d, %d" (nth (1- month) (alist-get 'en mulex-tr-months))
+               day year))
       ((and year month)
-       (format "%s, %d" (nth (1- month) mulex-tr-months) year))
+       (format "%s %d" (nth (1- month) (alist-get 'en mulex-tr-months)) year))
       (year (format "%d" year))
       (t nil)))))
 
