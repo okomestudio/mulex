@@ -92,5 +92,9 @@ This function returns nil if given date cannot be formatted."
       (year (format "%d" year))
       (t nil)))))
 
+(defmacro mulex-case (&rest body)
+  `(pcase (mulex-im-lang)
+     ,@body))
+
 (provide 'mulex)
 ;;; mulex.el ends here
