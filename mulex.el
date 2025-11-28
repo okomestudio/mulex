@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/mulex
-;; Version: 0.1.3
+;; Version: 0.1.4
 ;; Keywords: mule, multilingual
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -96,6 +96,17 @@ This function returns nil if given date cannot be formatted."
 (defmacro mulex-case (&rest body)
   `(pcase (mulex-im-lang)
      ,@body))
+
+(defun mulex-without-im (fun &rest args)
+  "Execute FUN with ARGS temporarily deactivating active input method."
+  (declare (indent 1))
+  (let ((im current-input-method))
+    (when im
+      (deactivate-input-method))
+    (unwind-protect
+        (apply fun args)
+      (when im
+        (set-input-method im)))))
 
 (provide 'mulex)
 ;;; mulex.el ends here
